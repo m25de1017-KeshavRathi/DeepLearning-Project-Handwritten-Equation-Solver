@@ -140,6 +140,7 @@ class TransformerDecoder(layers.Layer):
         self.layernorm3_layers = [layers.LayerNormalization() for _ in range(num_layers)]
         
         self.dropout_layers = [layers.Dropout(dropout_rate) for _ in range(num_layers)]
+        self.embedding_dropout = layers.Dropout(dropout_rate)
         
         # Output layer
         self.final_layer = layers.Dense(vocab_size)
@@ -160,7 +161,7 @@ class TransformerDecoder(layers.Layer):
         x = self.embedding(x)  # (batch, seq_len, d_model)
         x *= tf.math.sqrt(tf.cast(self.d_model, tf.float32))
         x = self.pos_encoding(x)
-        x = layers.Dropout(0.1)(x, training=training)
+        x = self.embedding_dropout(x, training=training)
         
         # Transformer decoder layers
         for i in range(self.num_layers):
