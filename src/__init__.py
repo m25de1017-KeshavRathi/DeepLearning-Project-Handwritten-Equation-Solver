@@ -1,0 +1,2 @@
+# Handwritten Equation Solver package
+

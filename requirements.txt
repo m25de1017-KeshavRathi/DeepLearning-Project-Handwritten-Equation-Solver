@@ -1,0 +1,30 @@
+# ============================================================================
+# IMPORTANT: This project requires Python 3.9 - 3.12
+# TensorFlow does NOT support Python 3.13+ yet
+# 
+# If you have Python 3.14, please install Python 3.12:
+#   macOS: brew install python@3.12
+#   Then: python3.12 -m venv venv
+#
+# See PYTHON_COMPATIBILITY.md and QUICK_FIX.md for detailed instructions
+# ============================================================================
+
+# Core Deep Learning (Python 3.9-3.12 required)
+numpy>=1.24.0,<2.0.0
+tensorflow>=2.15.0
+keras>=2.15.0
+
+# Image Processing
+opencv-python>=4.8.0
+pillow>=10.0.0
+
+# Data Science
+pandas>=2.0.0
+scikit-learn>=1.3.0
+matplotlib>=3.7.0
+
+# Dataset & Utilities
+kagglehub>=0.2.0
+lxml>=4.9.0
+tqdm>=4.65.0
+
