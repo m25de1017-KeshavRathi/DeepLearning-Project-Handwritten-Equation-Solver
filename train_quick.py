@@ -17,7 +17,9 @@ if __name__ == '__main__':
         '--d_model', '256',
         '--num_layers', '2',
         '--num_heads', '4',
-        '--dff', '1024'
+        '--dff', '1024',
+        '--augment',  # CRITICAL: Prevents overfitting!
+        '--checkpoint_freq', '5'
     ])
     
     print("="*80)
@@ -28,6 +30,7 @@ if __name__ == '__main__':
     print("  - Batch size: 16 (instead of 32)")
     print("  - Model size: 256 (instead of 512) - ~1.5M parameters")
     print("  - Layers: 2 (instead of 4)")
+    print("  - Data augmentation: ENABLED")
     print("  - Time estimate: ~30-60 minutes")
     print("="*80)
     print()
