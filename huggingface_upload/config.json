@@ -1,0 +1,37 @@
+{
+  "model_type": "cnn-transformer",
+  "task": "image-to-text",
+  "domain": "mathematical-expression-recognition",
+  "architecture": {
+    "encoder": "cnn",
+    "decoder": "transformer",
+    "d_model": 256,
+    "num_layers": 2,
+    "num_heads": 4,
+    "dff": 1024,
+    "dropout": 0.1,
+    "image_size": [128, 128, 1],
+    "max_sequence_length": 100
+  },
+  "training": {
+    "dataset": "CROHME2019",
+    "train_samples": 8900,
+    "val_samples": 986,
+    "test_samples": 1199,
+    "batch_size": 16,
+    "epochs": 10,
+    "best_epoch": 5,
+    "optimizer": "adam",
+    "learning_rate_schedule": "custom_warmup",
+    "augmentation": true
+  },
+  "performance": {
+    "train_accuracy": 0.9986,
+    "val_accuracy": 0.9977,
+    "best_val_loss": 0.0186
+  },
+  "framework": "tensorflow",
+  "framework_version": "2.15.0",
+  "python_version": "3.9-3.12"
+}
+

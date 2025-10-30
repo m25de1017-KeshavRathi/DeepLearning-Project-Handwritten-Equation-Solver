@@ -57,3 +57,5 @@ Thumbs.db
 # Kaggle
 kagglehub/
 
+huggingface_upload/best_model.keras
+huggingface_upload/vocabulary.pkl
