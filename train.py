@@ -59,6 +59,8 @@ def parse_args():
     # Other options
     parser.add_argument('--resume', type=str, default=None,
                        help='Resume training from checkpoint')
+    parser.add_argument('--checkpoint_freq', type=int, default=5,
+                       help='Save checkpoint every N epochs (default: 5)')
     parser.add_argument('--force_download', action='store_true',
                        help='Force re-download and parse dataset')
     
@@ -186,6 +188,15 @@ def main():
     run_name = f"run_{timestamp}"
     
     callbacks = [
+        # Save best model based on validation loss
+        keras.callbacks.ModelCheckpoint(
+            os.path.join(args.model_dir, 'best_model.h5'),
+            save_best_only=True,
+            monitor='val_loss',
+            mode='min',
+            verbose=1
+        ),
+        # Save checkpoint every epoch that improves
         keras.callbacks.ModelCheckpoint(
             os.path.join(args.model_dir, f'model_{run_name}_epoch_{{epoch:02d}}_val_loss_{{val_loss:.4f}}.h5'),
             save_best_only=True,
@@ -193,11 +204,11 @@ def main():
             mode='min',
             verbose=1
         ),
+        # Save checkpoint every N epochs (regardless of improvement)
         keras.callbacks.ModelCheckpoint(
-            os.path.join(args.model_dir, 'best_model.h5'),
-            save_best_only=True,
-            monitor='val_loss',
-            mode='min',
+            os.path.join(args.model_dir, f'checkpoint_{run_name}_epoch_{{epoch:02d}}.h5'),
+            save_freq='epoch',
+            period=args.checkpoint_freq,  # Configurable via --checkpoint_freq
             verbose=1
         ),
         keras.callbacks.TensorBoard(
