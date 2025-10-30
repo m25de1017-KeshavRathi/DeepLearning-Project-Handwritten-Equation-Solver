@@ -15,6 +15,23 @@ from src.model import create_model, CustomSchedule, masked_loss, masked_accuracy
 from src.utils import create_directories
 
 
+class PeriodicCheckpoint(keras.callbacks.Callback):
+    """Save model every N epochs."""
+    
+    def __init__(self, filepath, period=1, verbose=1):
+        super().__init__()
+        self.filepath = filepath
+        self.period = period
+        self.verbose = verbose
+    
+    def on_epoch_end(self, epoch, logs=None):
+        if (epoch + 1) % self.period == 0:
+            filepath = self.filepath.format(epoch=epoch + 1)
+            if self.verbose > 0:
+                print(f'\nEpoch {epoch + 1}: saving model to {filepath}')
+            self.model.save(filepath)
+
+
 def parse_args():
     """Parse command line arguments."""
     parser = argparse.ArgumentParser(description='Train handwritten equation solver')
@@ -204,10 +221,10 @@ def main():
             mode='min',
             verbose=1
         ),
-        # Save checkpoint every N epochs (native Keras format)
-        keras.callbacks.ModelCheckpoint(
-            os.path.join(args.model_dir, f'checkpoint_{run_name}_epoch_{{epoch:02d}}.keras'),
-            save_freq=args.checkpoint_freq,  # Save every N epochs
+        # Save checkpoint every N epochs (custom callback)
+        PeriodicCheckpoint(
+            filepath=os.path.join(args.model_dir, f'checkpoint_{run_name}_epoch_{{epoch:02d}}.keras'),
+            period=args.checkpoint_freq,
             verbose=1
         ),
         keras.callbacks.TensorBoard(
