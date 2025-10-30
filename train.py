@@ -207,8 +207,7 @@ def main():
         # Save checkpoint every N epochs (regardless of improvement)
         keras.callbacks.ModelCheckpoint(
             os.path.join(args.model_dir, f'checkpoint_{run_name}_epoch_{{epoch:02d}}.h5'),
-            save_freq='epoch',
-            period=args.checkpoint_freq,  # Configurable via --checkpoint_freq
+            save_freq=args.checkpoint_freq,  # Save every N epochs
             verbose=1
         ),
         keras.callbacks.TensorBoard(
