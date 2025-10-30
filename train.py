@@ -188,25 +188,25 @@ def main():
     run_name = f"run_{timestamp}"
     
     callbacks = [
-        # Save best model based on validation loss
+        # Save best model based on validation loss (native Keras format)
         keras.callbacks.ModelCheckpoint(
-            os.path.join(args.model_dir, 'best_model.h5'),
+            os.path.join(args.model_dir, 'best_model.keras'),
             save_best_only=True,
             monitor='val_loss',
             mode='min',
             verbose=1
         ),
-        # Save checkpoint every epoch that improves
+        # Save checkpoint every epoch that improves (native Keras format)
         keras.callbacks.ModelCheckpoint(
-            os.path.join(args.model_dir, f'model_{run_name}_epoch_{{epoch:02d}}_val_loss_{{val_loss:.4f}}.h5'),
+            os.path.join(args.model_dir, f'model_{run_name}_epoch_{{epoch:02d}}_val_loss_{{val_loss:.4f}}.keras'),
             save_best_only=True,
             monitor='val_loss',
             mode='min',
             verbose=1
         ),
-        # Save checkpoint every N epochs (regardless of improvement)
+        # Save checkpoint every N epochs (native Keras format)
         keras.callbacks.ModelCheckpoint(
-            os.path.join(args.model_dir, f'checkpoint_{run_name}_epoch_{{epoch:02d}}.h5'),
+            os.path.join(args.model_dir, f'checkpoint_{run_name}_epoch_{{epoch:02d}}.keras'),
             save_freq=args.checkpoint_freq,  # Save every N epochs
             verbose=1
         ),
@@ -279,8 +279,8 @@ def main():
     )
     
     # Save final model
-    final_model_path = os.path.join(args.model_dir, f'final_model_{run_name}.h5')
-    model.save_weights(final_model_path)
+    final_model_path = os.path.join(args.model_dir, f'final_model_{run_name}.keras')
+    model.save(final_model_path)
     print(f"\nFinal model saved to {final_model_path}")
     
     # Save training history

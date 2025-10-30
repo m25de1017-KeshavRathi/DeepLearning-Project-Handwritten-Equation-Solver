@@ -21,7 +21,7 @@ def parse_args():
     parser = argparse.ArgumentParser(description='Evaluate handwritten equation solver')
     
     parser.add_argument('--model_path', type=str, required=True,
-                       help='Path to trained model weights')
+                       help='Path to trained model (.keras or .h5)')
     parser.add_argument('--config_path', type=str, default=None,
                        help='Path to model config (if None, infer from model_path)')
     parser.add_argument('--vocab_path', type=str, default=None,
@@ -256,9 +256,16 @@ def main():
     }
     _ = model(dummy_input)
     
-    # Load weights
-    print(f"Loading model weights from {args.model_path}")
-    model.load_weights(args.model_path)
+    # Load model or weights
+    print(f"Loading model from {args.model_path}")
+    if args.model_path.endswith('.keras'):
+        # Load full model
+        model = keras.models.load_model(args.model_path, 
+                                        custom_objects={'masked_loss': masked_loss, 
+                                                       'masked_accuracy': masked_accuracy})
+    else:
+        # Load weights only (for .h5 files)
+        model.load_weights(args.model_path)
     
     # Evaluate
     print("\n" + "="*80)

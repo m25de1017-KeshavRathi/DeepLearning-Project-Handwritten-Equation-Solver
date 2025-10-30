@@ -23,7 +23,7 @@ def parse_args():
     parser.add_argument('--input', type=str, required=True,
                        help='Path to input InkML file or image')
     parser.add_argument('--model_path', type=str, required=True,
-                       help='Path to trained model weights')
+                       help='Path to trained model (.keras or .h5)')
     parser.add_argument('--config_path', type=str, default=None,
                        help='Path to model config (if None, infer from model_path)')
     parser.add_argument('--vocab_path', type=str, default=None,
@@ -368,9 +368,17 @@ def main():
     }
     _ = model(dummy_input)
     
-    # Load weights
-    print(f"Loading model weights from {args.model_path}")
-    model.load_weights(args.model_path)
+    # Load model or weights
+    print(f"Loading model from {args.model_path}")
+    if args.model_path.endswith('.keras'):
+        # Load full model
+        from src.model import masked_loss, masked_accuracy
+        model = keras.models.load_model(args.model_path,
+                                        custom_objects={'masked_loss': masked_loss,
+                                                       'masked_accuracy': masked_accuracy})
+    else:
+        # Load weights only (for .h5 files)
+        model.load_weights(args.model_path)
     
     # Determine input type
     input_ext = os.path.splitext(args.input)[1].lower()
