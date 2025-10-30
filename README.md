@@ -14,6 +14,7 @@ This project implements a **CNN-Transformer hybrid architecture** for recognizin
 - 🔄 **Transformer Decoder**: Generates LaTeX sequences with attention mechanism
 - 📊 **CROHME2019 Dataset**: Competition-quality handwritten math expressions
 - 🚀 **Production-Ready**: Complete training, evaluation, and inference pipeline
+- 🤗 **Hugging Face Ready**: Pre-trained model ready for upload and sharing
 
 ### Key Features
 
@@ -105,10 +106,13 @@ DeepLearning-Project-Handwritten-Equation-Solver/
 ├── TUTORIAL.md                  # Complete tutorial
 ├── ARCHITECTURE.md              # Architecture details
 ├── PROJECT_SUMMARY.md           # Project summary
+├── UPLOAD_READY.md              # Quick Hugging Face upload guide
+├── HUGGINGFACE_UPLOAD.md        # Detailed HF upload instructions
 │
 ├── data/                        # Dataset cache (auto-created)
 ├── models/                      # Saved models (auto-created)
-└── logs/                        # Training logs (auto-created)
+├── logs/                        # Training logs (auto-created)
+└── huggingface_upload/          # HF model files (README, config, model)
 ```
 
 ## 🏗️ Architecture
@@ -242,6 +246,47 @@ python predict.py \
 ### Inference Modes
 - **Greedy Decoding**: Fast, good quality
 - **Beam Search**: Slower, best quality
+
+## 🤗 Share Your Model on Hugging Face
+
+Upload your trained model to Hugging Face for easy sharing and deployment!
+
+### Quick Upload (3 steps)
+
+```bash
+# 1. Activate environment
+source .venv/bin/activate
+
+# 2. Run upload script (will ask for HF token)
+python upload_to_huggingface.py
+
+# 3. Test your uploaded model
+python test_huggingface_model.py --repo_id YOUR_USERNAME/handwritten-equation-solver
+```
+
+### What Gets Uploaded
+- ✅ `best_model.keras` (56 MB) - Trained model weights
+- ✅ `vocabulary.pkl` (1.3 KB) - Token vocabulary
+- ✅ `README.md` (4.4 KB) - Model card with usage examples
+- ✅ `config.json` (845 B) - Model configuration
+
+### Documentation
+- 📖 **Quick Guide**: See [UPLOAD_READY.md](UPLOAD_READY.md)
+- 📚 **Detailed Guide**: See [HUGGINGFACE_UPLOAD.md](HUGGINGFACE_UPLOAD.md)
+
+### Using Models from Hugging Face
+
+```python
+from huggingface_hub import hf_hub_download
+import tensorflow as tf
+
+# Download and load model
+model_path = hf_hub_download(
+    repo_id="username/handwritten-equation-solver",
+    filename="best_model.keras"
+)
+model = tf.keras.models.load_model(model_path)
+```
 
 ## 📚 Documentation
 
