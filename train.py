@@ -208,13 +208,8 @@ def main():
         keras.callbacks.CSVLogger(
             os.path.join(args.log_dir, f'training_{run_name}.csv')
         ),
-        keras.callbacks.ReduceLROnPlateau(
-            monitor='val_loss',
-            factor=0.5,
-            patience=5,
-            min_lr=1e-7,
-            verbose=1
-        ),
+        # Note: ReduceLROnPlateau is not compatible with LearningRateSchedule
+        # The custom schedule already handles learning rate adjustments
         keras.callbacks.EarlyStopping(
             monitor='val_loss',
             patience=15,
